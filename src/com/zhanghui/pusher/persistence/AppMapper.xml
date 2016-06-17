@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.AppMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.App" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="app_label" property="appLabel" jdbcType="VARCHAR" />
+        <result column="version" property="version" jdbcType="VARCHAR" />
+        <result column="app_path" property="appPath" jdbcType="VARCHAR" />
+        <result column="app_file_name" property="appFileName" jdbcType="VARCHAR"/>
+        <result column="app_icon" property="appIcon" jdbcType="VARCHAR"/>
+        <result column="app_package_name" property="appPackageName" jdbcType="VARCHAR"/>
+        <result column="app_version_code" property="appVersionCode" jdbcType="INTEGER"/>
+        <result column="app_min_sdk_version" property="appMinSdkVersion" jdbcType="INTEGER"/>
+        <result column="app_size" property="appSize" jdbcType="INTEGER" />
+        <result column="redirect_type" property="redirectType" jdbcType="INTEGER" />
+        <result column="dl_num" property="dlNum" jdbcType="VARCHAR" />
+        <result column="desc" property="desc" jdbcType="VARCHAR" />
+        <result column="ad_owner" property="adOwner" jdbcType="INTEGER" />
+        <result column="price" property="price" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="auto_dl" property="autoDl" jdbcType="INTEGER" />
+        <result column="auto_open" property="autoOpen" jdbcType="INTEGER" />
+        <result column="net_environment" property="netEnvironment" jdbcType="INTEGER" />
+        <result column="support_countries" property="supportCountries" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhanghui.pusher.domain.App">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">SELECT LAST_INSERT_ID()</selectKey>
+        insert into app (
+        `name`,
+        `app_label`,
+        `version`,
+        `app_path`,
+        `app_file_name`,
+        `app_size`,
+        `app_icon`,
+        `app_version_code`,
+        `app_package_name`,
+        `app_min_sdk_version`,
+        `redirect_type`,
+        `dl_num`,
+        `desc`,
+        `ad_owner`,
+        `price`,
+        `type`,
+        `auto_dl`,
+        `auto_open`,
+        `net_environment`,
+        `support_countries`,
+        `remark`,
+        `gmt_create`)
+        values(
+        #{name,jdbcType=VARCHAR},
+        #{appLabel,jdbcType=VARCHAR},
+        #{version,jdbcType=VARCHAR},
+        #{appPath,jdbcType=VARCHAR},
+        #{appFileName,jdbcType=VARCHAR},
+        #{appSize,jdbcType=INTEGER},
+        #{appIcon,jdbcType=VARCHAR},
+        #{appVersionCode,jdbcType=INTEGER},
+        #{appPackageName,jdbcType=VARCHAR},
+        #{appMinSdkVersion,jdbcType=INTEGER},
+        #{redirectType,jdbcType=INTEGER},
+        #{dlNum,jdbcType=VARCHAR},
+        #{desc,jdbcType=VARCHAR},
+        #{adOwner,jdbcType=INTEGER},
+        #{price,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER},
+        #{autoDl,jdbcType=INTEGER},
+        #{autoOpen,jdbcType=INTEGER},
+        #{netEnvironment,jdbcType=INTEGER},
+        #{supportCountries,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},now())
+    </insert>
+
+    <delete id="deleteById">
+        delete from app where id=#{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByIds">
+        delete from app where id in
+        <foreach collection="array" item="ids"  open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="updateByIdSelective" parameterType="com.zhanghui.pusher.domain.App">
+        update app
+        <set>
+            <if test="fn.notEmpty(name)">
+                name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(appLabel)">
+                app_label=#{appLabel,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(version)">
+                version=#{version,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(appPath)">
+                app_path=#{appPath,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(appFileName)">
+                app_file_name=#{appFileName,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(appSize)">
+                app_size=#{appSize,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(appIcon)">
+                app_icon=#{appIcon,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(appVersionCode)">
+                app_version_code=#{appVersionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(appPackageName)">
+                app_package_name=#{appPackageName,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(appMinSdkVersion)">
+                app_min_sdk_version=#{appMinSdkVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(redirectType)">
+                redirect_type=#{redirectType,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(dlNum)">
+                dl_num=#{dlNum,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(desc)">
+                `desc`=#{desc,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(adOwner)">
+                `ad_owner`=#{adOwner,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(price)">
+                `price`=#{price,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(type)">
+                `type`=#{type,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(autoDl)">
+                `auto_dl`=#{autoDl,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(autoOpen)">
+                `auto_open`=#{autoOpen,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(netEnvironment)">
+                `net_environment`=#{netEnvironment,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(supportCountries)">
+                `support_countries`=#{supportCountries,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(remark)">
+                remark=#{remark,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `name`,
+        `app_label`,
+        `version`,
+        `app_path`,
+        `app_file_name`,
+        `app_size`,
+        `app_icon`,
+        `app_version_code`,
+        `app_package_name`,
+        `app_min_sdk_version`,
+        `redirect_type`,
+        `dl_num`,
+        `remark`,
+        `desc`,
+        `ad_owner`,
+        `price`,
+        `type`,
+        `auto_dl`,
+        `auto_open`,
+        `net_environment`,
+        `support_countries`,
+        `gmt_create`,
+        `gmt_modified`
+    </sql>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from app
+    </select>
+    <sql id="select_count_where_sql">
+        <where>
+            <if test="query.name != null">
+                name like #{query.name}
+            </if>
+        </where>
+    </sql>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select count(*)
+        from app
+        <include refid="select_count_where_sql"/>
+    </select>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from app
+        <include refid="select_count_where_sql"/>
+        order by id desc limit #{start},#{sqlSize}
+    </select>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="Base_Column_List"/> from app where id=#{id,jdbcType=INTEGER}
+    </select>
+</mapper>

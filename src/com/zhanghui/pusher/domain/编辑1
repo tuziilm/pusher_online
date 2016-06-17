@@ -1,0 +1,33 @@
+{
+    "flag": "success",
+    "data": {
+        "data": {
+            "100563": {
+                "pkgname": "",
+                "name": "App Download - WorldRemit Money Transfer - Android - AU NON-INCENT",
+                "preview_url": "https://play.google.com/store/apps/details?id=com.worldremit.android",
+                "type": "other",
+                "title": "",
+                "description": null,
+                "tracklink": "http://global.ymtracking.com/trace?offer_id=100563&aff_id=25319",
+                "countries": [
+                    "AU"
+                ],
+                "payout": "1.650",
+                "platform": [],
+                "traffic": [
+                    "Search traffic allowed",
+                    "SMS Traffic allowed",
+                    "Wifi traffic allowed",
+                    "Display traffic allowed",
+                    "In - App Display traffic allowed"
+                ],
+                "creative_link": [],
+                "remaining_daily_cap": 300
+            }
+        },
+        "totalrecord": 2729,
+        "totalpage": 91
+    },
+    "msg": "success."
+}

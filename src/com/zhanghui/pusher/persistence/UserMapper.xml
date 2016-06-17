@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.UserMapper">
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="identity" property="identity" jdbcType="VARCHAR"/>
+        <result column="from" property="from" jdbcType="VARCHAR"/>
+        <result column="android_id" property="androidId" jdbcType="VARCHAR"/>
+        <result column="bt_mac" property="btMac" jdbcType="VARCHAR"/>
+        <result column="is_pad" property="isPad" jdbcType="VARCHAR"/>
+        <result column="mac" property="mac" jdbcType="VARCHAR"/>
+        <result column="imei" property="imei" jdbcType="VARCHAR"/>
+        <result column="imsi" property="imsi" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="android_ver" property="androidVer" jdbcType="VARCHAR"/>
+        <result column="android_level" property="androidLevel" jdbcType="INTEGER"/>
+        <result column="wifi" property="wifi" jdbcType="INTEGER"/>
+        <result column="apk_name" property="apkName" jdbcType="VARCHAR"/>
+        <result column="pkg_name" property="pkgName" jdbcType="VARCHAR"/>
+        <result column="version_name" property="versionName" jdbcType="VARCHAR"/>
+        <result column="version_code" property="versionCode" jdbcType="VARCHAR"/>
+        <result column="mcc" property="mcc" jdbcType="VARCHAR"/>
+        <result column="mnc" property="mnc" jdbcType="VARCHAR"/>
+        <result column="sim_country" property="simCountry" jdbcType="VARCHAR"/>
+        <result column="operator_name" property="operatorName" jdbcType="VARCHAR"/>
+        <result column="sdcard_count_spare" property="sdcardCountSpare" jdbcType="INTEGER"/>
+        <result column="sdcard_available_spare" property="sdcardAvailableSpare" jdbcType="INTEGER"/>
+        <result column="system_count_spare" property="systemCountSpare" jdbcType="INTEGER"/>
+        <result column="system_available_spare" property="systemAvailableSpare" jdbcType="INTEGER"/>
+        <result column="resolution" property="resolution" jdbcType="VARCHAR"/>
+        <result column="brand" property="brand" jdbcType="VARCHAR"/>
+        <result column="model" property="model" jdbcType="VARCHAR"/>
+        <result column="loc" property="loc" jdbcType="VARCHAR"/>
+        <result column="sys_apps" property="sysApps" jdbcType="VARCHAR"/>
+        <result column="user_apps" property="userApps" jdbcType="VARCHAR"/>
+        <result column="in_sys" property="inSys" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhanghui.pusher.domain.User">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">SELECT LAST_INSERT_ID()</selectKey>
+        INSERT INTO `user`(
+        `identity`,
+        `from`,
+        `android_id`,
+        `bt_mac`,
+        `is_pad`,
+        `mac`,
+        `imei`,
+        `imsi`,
+        `version`,
+        `android_ver`,
+        `android_level`,
+        `wifi`,
+        `apk_name`,
+        `pkg_name`,
+        `version_name`,
+        `version_code`,
+        `mcc`,
+        `mnc`,
+        `sim_country`,
+        `operator_name`,
+        `sdcard_count_spare`,
+        `sdcard_available_spare`,
+        `system_count_spare`,
+        `system_available_spare`,
+        `resolution`,
+        `brand`,
+        `model`,
+        `loc`,
+        `sys_apps`,
+        `user_apps`,
+        `in_sys`,
+        `gmt_create`
+        ) VALUES (
+        #{identity,jdbcType=VARCHAR},
+        #{from,jdbcType=VARCHAR},
+        #{androidId,jdbcType=VARCHAR},
+        #{btMac,jdbcType=VARCHAR},
+        #{isPad,jdbcType=VARCHAR},
+        #{mac,jdbcType=VARCHAR},
+        #{imei,jdbcType=VARCHAR},
+        #{imsi,jdbcType=VARCHAR},
+        #{version,jdbcType=VARCHAR},
+        #{androidVer,jdbcType=VARCHAR},
+        #{androidLevel,jdbcType=INTEGER},
+        #{wifi,jdbcType=INTEGER},
+        #{apkName,jdbcType=VARCHAR},
+        #{pkgName,jdbcType=VARCHAR},
+        #{versionName,jdbcType=VARCHAR},
+        #{versionCode,jdbcType=VARCHAR},
+        #{mcc,jdbcType=VARCHAR},
+        #{mnc,jdbcType=VARCHAR},
+        #{simCountry,jdbcType=VARCHAR},
+        #{operatorName,jdbcType=VARCHAR},
+        #{sdcardCountSpare,jdbcType=INTEGER},
+        #{sdcardAvailableSpare,jdbcType=INTEGER},
+        #{systemCountSpare,jdbcType=INTEGER},
+        #{systemAvailableSpare,jdbcType=INTEGER},
+        #{resolution,jdbcType=VARCHAR},
+        #{brand,jdbcType=VARCHAR},
+        #{model,jdbcType=VARCHAR},
+        #{loc,jdbcType=VARCHAR},
+        #{sysApps,jdbcType=VARCHAR},
+        #{userApps,jdbcType=VARCHAR},
+        #{inSys,jdbcType=INTEGER},
+        now()
+        );
+    </insert>
+
+    <delete id="deleteByIds">
+        delete from user where id in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="updateByIdSelective" parameterType="com.zhanghui.pusher.domain.User">
+        update user
+        <set>
+            <if test="fn.notEmpty(identity)">
+                `identity`=#{identity,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(from)">
+                `from`=#{from,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(androidId)">
+                `android_id`=#{androidId,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(btMac)">
+                `bt_mac`=#{btMac,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(isPad)">
+                `is_pad`=#{isPad,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(mac)">
+                `mac`=#{mac,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(imei)">
+                `imei`=#{imei,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(imsi)">
+                `imsi`=#{imsi,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(version)">
+                `version`=#{version,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(androidVer)">
+                `android_ver`=#{androidVer,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(androidLevel)">
+                `android_level`=#{androidLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(wifi)">
+                `wifi`=#{wifi,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(apkName)">
+                `apk_name`=#{apkName,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(pkgName)">
+                `pkg_name`=#{pkgName,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(versionName)">
+                `version_name`=#{versionName,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(versionCode)">
+                `version_code`=#{versionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(mcc)">
+                `mcc`=#{mcc,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(mnc)">
+                `mnc`=#{mnc,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(simCountry)">
+                `sim_country`=#{simCountry,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(operatorName)">
+                `operator_name`=#{operatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(sdcardCountSpare)">
+                `sdcard_count_spare`=#{sdcardCountSpare,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(sdcardAvailableSpare)">
+                `sdcard_available_spare`=#{sdcardAvailableSpare,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(systemCountSpare)">
+                `system_count_spare`=#{systemCountSpare,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(systemAvailableSpare)">
+                `system_available_spare`=#{systemAvailableSpare,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(resolution)">
+                `resolution`=#{resolution,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(brand)">
+                `brand`=#{brand,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(model)">
+                `model`=#{model,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(loc)">
+                `loc`=#{loc,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(sysApps)">
+                `sys_apps`=#{sysApps,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(userApps)">
+                `user_apps`=#{userApps,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(inSys)">
+                `in_sys`=#{inSys,jdbcType=INTEGER},
+            </if>
+        </set>
+        where `identity` = #{identity, jdbcType=VARCHAR}
+    </update>
+    <sql id="Base_Column_List">
+    `id`,
+    `identity`,
+    `from`,
+    `android_id`,
+    `bt_mac`,
+    `is_pad`,
+    `mac`,
+    `imei`,
+    `imsi`,
+    `version`,
+    `android_ver`,
+    `android_level`,
+    `wifi`,
+    `apk_name`,
+    `pkg_name`,
+    `version_name`,
+    `version_code`,
+    `mcc`,
+    `mnc`,
+    `sim_country`,
+    `operator_name`,
+    `sdcard_count_spare`,
+    `sdcard_available_spare`,
+    `system_count_spare`,
+    `system_available_spare`,
+    `resolution`,
+    `brand`,
+    `model`,
+    `loc`,
+    `in_sys`,
+    `gmt_create`,
+    `gmt_modified`
+  </sql>
+    <sql id="select_where">
+        <where>
+            <if test="fn.notEmpty(query.identity)">
+                `identity`=#{query.identity}
+            </if>
+            and gmt_create>= #{query.startTime} and gmt_create&lt; #{query.endTime}
+            <if test="fn.notEmpty(query.simCountry)">
+                and sim_country=#{query.simCountry}
+            </if>
+            <if test="fn.notEmpty(query.version)">
+                and version=#{query.version}
+            </if>
+            <if test="fn.notEmpty(query.from)">
+                and `from`=#{query.from}
+            </if>
+        </where>
+    </sql>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        <include refid="select_where"/>
+        order by id desc limit #{start},#{sqlSize}
+    </select>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.zhanghui.pusher.common.Paginator">
+        select count(*)
+        from user
+        <include refid="select_where"/>
+    </select>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from user where id=#{id}
+    </select>
+    <select id="selectByIdentity" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from user where identity=#{identity}
+    </select>
+</mapper>

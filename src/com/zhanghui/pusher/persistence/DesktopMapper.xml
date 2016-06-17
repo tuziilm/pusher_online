@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.DesktopMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.Desktop" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="ref_ids" property="refIds" jdbcType="VARCHAR" />
+        <result column="mtitle" property="mtitle" jdbcType="VARCHAR" />
+        <result column="icon_path" property="iconPath" jdbcType="VARCHAR" />
+        <result column="countries" property="countries" jdbcType="VARCHAR" />
+        <result column="priority" property="priority" jdbcType="INTEGER" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhanghui.pusher.domain.Desktop">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">SELECT LAST_INSERT_ID()</selectKey>
+        insert into desktop(
+        `name`,
+        `type`,
+        `ref_ids`,
+        `mtitle`,
+        `icon_path`,
+        `countries`,
+        `priority`,
+        `status`,
+        `remark`,
+        `gmt_create`)
+        values(
+        #{name,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER},
+        #{refIds,jdbcType=VARCHAR},
+        #{mtitle,jdbcType=VARCHAR},
+        #{iconPath,jdbcType=VARCHAR},
+        #{countries,jdbcType=VARCHAR},
+        #{priority,jdbcType=INTEGER},
+        1,
+        #{remark,jdbcType=VARCHAR},now())
+    </insert>
+
+    <delete id="deleteById">
+        delete from desktop where id=#{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByIds">
+        delete from desktop where id in
+        <foreach collection="array" item="ids"  open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="updateByIdSelective" parameterType="com.zhanghui.pusher.domain.Desktop">
+        update desktop
+        <set>
+            <if test="fn.notEmpty(name)">
+                name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(type)">
+                type=#{type,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(refIds)">
+                ref_ids=#{refIds,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(mtitle)">
+                mtitle=#{mtitle,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(iconPath)">
+                icon_path=#{iconPath,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(countries)">
+                countries=#{countries,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(priority)">
+                priority=#{priority,jdbcType=INTEGER},
+            </if>
+            <if test="fn.notEmpty(remark)">
+                remark=#{remark,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `name`,
+        `type`,
+        `ref_ids`,
+        `mtitle`,
+        `icon_path`,
+        `countries`,
+        `priority`,
+        `status`,
+        `remark`,
+        `gmt_create`,
+        `gmt_modified`
+    </sql>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from desktop where priority > -1 order by priority desc
+    </select>
+    <sql id="select_count_where_sql">
+        <where>
+            <if test="query.name != null">
+                name like #{query.name}
+            </if>
+        </where>
+    </sql>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select count(*)
+        from desktop
+        <include refid="select_count_where_sql"/>
+    </select>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from desktop
+        <include refid="select_count_where_sql"/>
+        order by id desc limit #{start},#{sqlSize}
+    </select>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="Base_Column_List"/> from desktop where id=#{id,jdbcType=INTEGER}
+    </select>
+</mapper>

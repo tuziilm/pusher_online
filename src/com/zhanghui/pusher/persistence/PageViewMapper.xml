@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.PageViewMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.PageView" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="module" property="module" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="from" property="from" jdbcType="VARCHAR" />
+        <result column="pv" property="pv" jdbcType="INTEGER" />
+        <result column="uv" property="uv" jdbcType="INTEGER" />
+        <result column="schedule" property="schedule" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        `id`,
+        `code`,
+        `module`,
+        `country`,
+        `from`,
+        `pv`,
+        `uv`,
+        `schedule`
+    </sql>
+    <sql id="select_count_where_sql">
+        <where>
+            schedule = #{query.startTime}
+            <if test="fn.notEmpty(query.module)">
+                and module=#{query.module}
+            </if>
+            <choose>
+                <when test="fn.notEmpty(query.code)">
+                    and code=#{query.code}
+                </when>
+                <otherwise>
+                    and `code`&lt;&gt;'all'
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="fn.notEmpty(query.from)">
+                    and `from`=#{query.from}
+                </when>
+                <otherwise>
+                    and `from`&lt;&gt;'all'
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="fn.notEmpty(query.country)">
+                    and country=#{query.country}
+                </when>
+                <otherwise>
+                    and country&lt;&gt;'all'
+                </otherwise>
+            </choose>
+        </where>
+    </sql>
+    <sql id="get_chart_data_where_sql">
+        <where>
+            schedule >= #{query.startTime} and schedule &lt;= #{query.endTime}
+            <if test="fn.notEmpty(query.module)">
+                and module=#{query.module}
+            </if>
+            <if test="fn.notEmpty(query.code)">
+                and code=#{query.code}
+            </if>
+            <if test="fn.notEmpty(query.from)">
+                and `from`=#{query.from}
+            </if>
+            <if test="fn.notEmpty(query.country)">
+                and country=#{query.country}
+            </if>
+        </where>
+    </sql>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from page_view
+        <include refid="select_count_where_sql"/>
+        order by uv desc
+        limit #{start},#{sqlSize}
+    </select>
+    <select id="getChartDatas" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from page_view
+        <include refid="get_chart_data_where_sql"/>
+        order by schedule
+    </select>
+</mapper>

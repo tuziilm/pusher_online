@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.AppIncomeSummaryMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.AppIncomeSummary" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="pkg_name" property="pkgName" jdbcType="VARCHAR" />
+        <result column="request_times" property="requestTimes" jdbcType="INTEGER" />
+        <result column="show_times" property="showTimes" jdbcType="INTEGER" />
+        <result column="click_times" property="clickTimes" jdbcType="INTEGER" />
+        <result column="income" property="income" jdbcType="INTEGER" />
+        <result column="date" property="date" jdbcType="VARCHAR" />
+    </resultMap>
+	<resultMap id="ResultMap2" type="com.zhanghui.pusher.domain.SumData" >
+        <result column="request_times" property="requestTimes" jdbcType="INTEGER" />
+        <result column="show_times" property="showTimes" jdbcType="INTEGER" />
+        <result column="click_times" property="clickTimes" jdbcType="INTEGER" />
+        <result column="income" property="income" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        `id`,
+        `pkg_name`,
+        `request_times`,
+        `show_times`,
+        `click_times`,
+        `income`,
+        `date`,
+    </sql>
+    <sql id="select_count_where_sql">
+        <where>
+            `date` >= #{query.startTime} and `date` &lt;= #{query.endTime}
+        </where>
+    </sql>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select count(*)
+        from (select pkg_name , `date`  from app_income 
+        <include refid="select_count_where_sql"/>
+        group by pkg_name,`date`) a 
+    </select>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select pkg_name , `date`, sum(request_times) as request_times, sum(show_times) as show_times, sum(click_times) as click_times, sum(income) as income
+        from app_income
+        <include refid="select_count_where_sql"/>
+        group by pkg_name,`date`
+        order by `date` desc, show_times desc limit #{start},#{sqlSize}
+    </select>
+    <select id="getSum" resultMap="ResultMap2" parameterType="com.zhanghui.pusher.common.Paginator">
+    	select sum(request_times) as request_times,sum(show_times) as show_times,sum(click_times) as click_times,sum(income) as income
+    	from app_income
+    	<include refid="select_count_where_sql"/>
+    </select>
+</mapper>

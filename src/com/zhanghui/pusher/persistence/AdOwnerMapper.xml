@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.AdOwnerMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.AdOwner" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="remark" property="remark" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="insert" parameterType="com.zhanghui.pusher.domain.AdOwner">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">SELECT LAST_INSERT_ID()</selectKey>
+        insert into ad_owner (
+        `name`,
+        `remark`,
+        `gmt_create`)
+        values(
+        #{name,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR},now())
+    </insert>
+
+    <delete id="deleteById">
+        delete from ad_owner where id=#{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByIds">
+        delete from ad_owner where id in
+        <foreach collection="array" item="ids"  open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+
+    <update id="updateByIdSelective" parameterType="com.zhanghui.pusher.domain.AdOwner">
+        update ad_owner
+        <set>
+            <if test="fn.notEmpty(name)">
+                name=#{name,jdbcType=VARCHAR},
+            </if>
+            <if test="fn.notEmpty(remark)">
+                remark=#{remark,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id=#{id,jdbcType=INTEGER}
+    </update>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `name`,
+        `remark`,
+        `gmt_create`,
+        `gmt_modified`
+    </sql>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from ad_owner
+    </select>
+    <sql id="select_count_where_sql">
+        <where>
+            <if test="query.name != null">
+                name like #{query.name}
+            </if>
+        </where>
+    </sql>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select count(*)
+        from ad_owner
+        <include refid="select_count_where_sql"/>
+    </select>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from ad_owner
+        <include refid="select_count_where_sql"/>
+        order by id desc limit #{start},#{sqlSize}
+    </select>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select <include refid="Base_Column_List"/> from ad_owner where id=#{id,jdbcType=INTEGER}
+    </select>
+</mapper>

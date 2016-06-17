@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.TaskActionViewMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.TaskActionView" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+        <result column="module" property="module" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="action_id" property="actionId" jdbcType="VARCHAR" />
+        <result column="count" property="count" jdbcType="INTEGER" />
+        <result column="schedule" property="schedule" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        `id`,
+        `task_id`,
+        `module`,
+        `country`,
+        `action_id`,
+        `count`,
+        `schedule`
+    </sql>
+    <sql id="select_count_where_sql">
+        <where>
+            schedule = #{query.startTime}
+            <if test="fn.notEmpty(query.module)">
+                and module=#{query.module}
+            </if>
+            <choose>
+                <when test="fn.notEmpty(query.taskId)">
+                    and task_id=#{query.taskId}
+                </when>
+                <otherwise>
+                    and task_id &lt;&gt; 'all'
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="fn.notEmpty(query.actionId)">
+                    and action_id=#{query.actionId}
+                </when>
+                <otherwise>
+                    and action_id &lt;&gt; 'all'
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="fn.notEmpty(query.country)">
+                    and country=#{query.country}
+                </when>
+                <otherwise>
+                    and country &lt;&gt; 'all'
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="fn.notEmpty(query.taskIds)">
+                    and task_id in
+			        <foreach collection="query.taskIds" item="id"  open="(" separator="," close=")">
+			            #{id}
+			        </foreach>
+                </when>
+            </choose>
+        </where>
+    </sql>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from task_view
+        <include refid="select_count_where_sql"/>
+        order by schedule desc, `count` desc
+        limit #{start},#{sqlSize}
+    </select>
+</mapper>

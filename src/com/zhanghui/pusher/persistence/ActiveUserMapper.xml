@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.ActiveUserMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.ActiveUser" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="from" property="from" jdbcType="VARCHAR" />
+        <result column="active_user" property="activeUser" jdbcType="INTEGER" />
+        <result column="valid_active_user" property="validActiveUser" jdbcType="INTEGER" />
+        <result column="add_user" property="addUser" jdbcType="INTEGER" />
+        <result column="date" property="date" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `country`,
+        `from`,
+        `active_user`,
+        `valid_active_user`,
+        `add_user`,
+        `date`,
+        `gmt_create`,
+        `gmt_modified`
+    </sql>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from active_user
+    </select>
+    <sql id="select_count_where_sql">
+        <where>
+            `date` >= #{query.startTime} and `date` &lt;= #{query.endTime}
+            <choose>
+                <when test="fn.notEmpty(query.country)">
+                    and country = #{query.country}
+                </when>
+                <otherwise>
+                    and country &lt;&gt; 'all'
+                </otherwise>
+            </choose>    
+            <choose>
+                <when test="fn.notEmpty(query.from)">
+                    and `from` = #{query.from}
+                </when>
+                <otherwise>
+                    and `from` &lt;&gt; 'all'
+                </otherwise>
+            </choose>
+        </where>
+    </sql>
+    <select id="count" resultType="java.lang.Integer" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select count(*)
+        from active_user
+        <include refid="select_count_where_sql"/>
+    </select>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from active_user
+        <include refid="select_count_where_sql"/>
+        order by `date` desc, active_user desc
+    </select>
+</mapper>

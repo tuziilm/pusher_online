@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhanghui.pusher.persistence.TopAppMapper" >
+    <resultMap id="BaseResultMap" type="com.zhanghui.pusher.domain.TopApp" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="app_name" property="appName" jdbcType="VARCHAR" />
+        <result column="country" property="country" jdbcType="VARCHAR" />
+        <result column="active_user" property="activeUser" jdbcType="INTEGER" />
+        <result column="use_times" property="useTimes" jdbcType="INTEGER" />
+        <result column="date" property="date" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `id`,
+        `app_name`,
+        `country`,
+        `active_user`,
+        `use_times`,
+        `date`,
+        `gmt_create`,
+        `gmt_modified`
+    </sql>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from top_app
+    </select>
+    <sql id="select_count_where_sql">
+        <where>
+            <if test="fn.notEmpty(query.country)">
+                and country=#{query.country}
+            </if>
+        </where>
+    </sql>
+    <select id="select" resultMap="BaseResultMap" parameterType="com.zhanghui.pusher.common.Paginator" >
+        select
+        <include refid="Base_Column_List" />
+        from top_app
+        <include refid="select_count_where_sql"/>
+        order by active_user desc limit #{start},#{sqlSize}
+    </select>
+</mapper>

@@ -21,17 +21,11 @@ public class PushStatController  extends AbstractCallbackController {
         simpleSuccess(response);
     }
     public static class Form extends BaseForm{
-        @NotNull
         private String uid;//必选参数，是接口一返回的值，用于标识用户唯一身份
-        @NotNull
         private Integer msgType;//必选参数，这个是广告类型，请参考接口二的参数说明
-        @NotNull
         private String ad_id;//必选参数，这个是广告ID，请参考接口二的参数说明
-        @NotNull
         private Integer tid;//必选参数，管理后台建立的任务ID，请参考接口二的参数说明
-        @NotNull
         private Integer action_id;//必选参数，表示用户对广告作出的反应动作，请参考 备注6
-        @NotNull
         private Boolean auto_show;//必选参数，true|false（boolean型，值为true表示自动展示广告，相当于用户点击这个广告后看到的效果，只是免去了用户点击这个动作)
         private String pkgname;//pkgname,必选参数，除广告外，其他功能值为””
         private String classname;//classname,必选参数，除广告外，其他功能值为””

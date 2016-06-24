@@ -148,7 +148,6 @@ public class UserController extends AbstractCallbackController {
     public static class Form extends BaseForm {
         @NotEmpty
         private String from;
-        @NotEmpty
         private String imsi;
         private String sys_apps;
         private String user_apps;

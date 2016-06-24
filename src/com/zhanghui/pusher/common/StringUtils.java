@@ -83,6 +83,6 @@ public class StringUtils {
 //		String[][] data=new String[][]{{"a","b"},{"c","d"},{"c","d"}};
 //		System.out.println(toGoogleChartData(data));
 		System.out.println("args = " + StringUtils.defVal("123123", UUID.randomUUID().toString()));
-		System.out.println("args = " + Strings.isNullOrEmpty(" "));
+		System.out.println("args = " + StringUtils.defVal(null, UUID.randomUUID().toString()));
 	}
 }
